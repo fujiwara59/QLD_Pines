@@ -1,7 +1,4 @@
-"TOA5","Bribie","CR800","21133","CR800.Std.24","CPU:Fuji_Dendrometer.CR8","47567","DendroTenMinOutput"
 "TIMESTAMP","RECORD","batt_volt_Avg","PTemp","Dendro_Avg(1)","Dendro_Avg(2)","Dendro_Avg(3)","Dendro_Avg(4)","Dendro_Avg(5)","Dendro_Avg(6)"
-"TS","RN","Volts","Deg C","mV","mV","mV","mV","mV","mV"
-"","","Avg","Smp","Avg","Avg","Avg","Avg","Avg","Avg"
 "2012-07-11 12:10:00",5022,12.84,18.66,2356.242,354.2189,193.7874,563.1843,2079.869,1
 "2012-07-11 12:20:00",5023,12.86,18.71,2356.242,354.2189,193.7874,563.1843,2079.869,1
 "2012-07-11 12:30:00",5024,12.84,18.74,2356.242,354.2189,193.7874,563.1843,2079.869,1
