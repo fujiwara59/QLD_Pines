@@ -1,0 +1,85 @@
+'CR800 Series Datalogger
+'To create a different opening program template, type in new
+'instructions and select Template | Save as Default Template
+'date:
+'program author:Rolf Faux
+'
+'Instrument list
+'--- CR800 datalogger (serial # xxxx)   ???
+'--- Batttteries
+'--- Solar regulator
+'--- Solar panel
+'--- ZN11 Point Dendrometer x 4
+
+'-----------------------------
+'
+'!!!wiring details on CR800 datalogger!!!
+'
+' 1H - ZN11 Dendrometer #1 Signal (white)
+' 1L - ZN11 Dendrometer #2 Signal (white)
+' 1GND - ZN11 Dendrometer #1, #2  GND (Black)
+'
+' 2H - ZN11 Dendrometer #3 Signal (white)
+' 2L - ZN11 Dendrometer #4 Signal (white)
+' 2GND - ZN11 Dendrometer #3,#4 GND (Black) 
+'
+' 3H -  
+' 3L - 
+' 3GND - 
+'
+' 5V - ZN11 Dendrometer #1, #2, #3,#4 Power(Red)
+'
+'Declare Constants
+'numbers of ZN11 dendrometers installed
+Const ZNNum = 6 
+'Declare Public Variables
+
+Public PTemp, batt_volt
+Public Dendro (ZNNum) ' Dendrometers
+
+
+
+'---------------------------
+'Declare Units
+Units batt_volt=Volts
+Units PTemp=Deg C
+Units Dendro=mV
+
+'Define Data Tables
+DataTable (Test,True,-1)
+	DataInterval (0,1,Min,10)
+	Minimum (1,batt_volt,FP2,0,False)
+	Sample (1,PTemp,FP2)
+EndTable
+
+'Data table for ZN11 Dendrometers 10 minute output
+DataTable(DendroTenMinOutput,True,-1)
+	DataInterval(0,10,Min,0)
+	Average(1,batt_volt,FP2,False)
+	Sample (1,PTemp,FP2)
+	Average(ZNNum,Dendro(),IEEE4,False)
+EndTable
+	
+DataTable(DendroTwentyfourHrs,True,-1)
+	DataInterval(0,1440,Min,0)
+	Minimum (1,PTemp,FP2, False,True)
+	Maximum (1,PTemp,FP2, False,True)
+	Minimum (1,batt_volt,FP2, False,True)
+	Minimum(ZNNum, Dendro(), IEEE4, False,True)
+	Maximum	(ZNNum, Dendro(), IEEE4, False,True)
+EndTable
+
+'Main Program
+BeginProg
+	Scan (1,Min,0,0)
+		PanelTemp (PTemp,250)
+		Battery (batt_volt)
+'ZN11 Dendrometer measurement
+     VoltSe (Dendro(),ZNNum,mV5000,1,1,0,_50Hz,1.0,1)
+'Call Output Tables
+		CallTable (Test)
+		CallTable(DendroTenMinOutput)
+		CallTable(DendroTwentyfourHrs)
+	NextScan
+EndProg
+
