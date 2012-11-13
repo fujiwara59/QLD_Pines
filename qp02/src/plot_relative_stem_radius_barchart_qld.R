@@ -15,10 +15,10 @@
 #############################################################
 # REQUIRED USER INPUT
 # choose input dataframe                                    #
-DFx <- den.all                                              #
+DFx <- den.qld                                              #
 # choose method 1 or method 2, and time period to examine   #
 spec.method <- 1                                            #
-spec.method <- 2                                            #
+#spec.method <- 2                                            #
 spec.s <- as.POSIXct('2012-05-01')                          #
 #############################################################
 
@@ -29,27 +29,32 @@ DFx <- DFx[DFx$TIMESTAMP > spec.s, ]
 # method 1: using a loop
 #######################################################################################
 # initialising output df
+require(zoo)
 if(spec.method ==1) {
   print('Method 1 chosen')
 outputDF <- data.frame("Tree" = NA, 'Growth' = NA)
-
 # loop over target columns
 wide <- DFx
 wide <- na.trim(DFx) # need to do this because it is always unbalanced at the end.. 
-for (i in 4:9) {
+  x <- c()
+#trees.vec <- unlist(trees)
+for (i in trees) {
+  print(i)
   n <- nrow(wide)
-  
-#   x[['Max']] <- max(wide[ ,i], na.rm = TRUE) # using max and min is extremely prone to outliers 
-#   x[['Min']] <- min(wide[ ,i], na.rm = TRUE)
+  # x[['Max']] <- max(wide[ ,i], na.rm = TRUE) # using max and min is extremely prone to outliers 
+  # x[['Min']] <- min(wide[ ,i], na.rm = TRUE)
   x[['Max']] <- wide[n, i]
   x[['Min']] <- wide[1, i]
   
   y <- x[['Max']] - x[['Min']]
-  outputDF[i, 1] <- colnames(wide)[[i]]
+  outputDF[i, 1] <- colnames(wide)[i]
   outputDF[i, 2] <- y
 }
 outputDF
 }
+
+detach(package:zoo)
+
 #######################################################################################
 
 # method 2 - using apply, 'first' & 'last', vectors subtraction
@@ -102,54 +107,53 @@ gr1 <- smry.df
 
 # dividing by stem radius
 ################################################################################
-
-DF1 <- tall.gr
-DF2 <- tree.info
-
-DF3 <- merge(
-  x = DF1 , # [c('TIMESTAMP', 'Mean','Site','Tree')]
-  y = DF2, # [c('Site', 'Tree', 'DBH_cm')]
-  by.x = c('Tree', 'Site'),
-  by.y = c('Port', 'Site'))
-
-head(DF3)
-
-# divide (tree growth) by (radius @ breast height)
-# convert radiusto mm
-DF3$DBH_mm <- DF3$DBH_cm * 10 
-DF3$rad_mm <- DF3$DBH_mm / 2 
-# divide Growth by radius
-DF3$Growth_per_mm <- DF3$Growth / DF3$rad_mm
-
-# divide (tree growth) by (radius in m)
-DF3$rad_m <- DF3$rad_mm / 1000
-DF3$Growth_per_m <- DF3$Growth / DF3$rad_m
-
-# selecting only columns of interest for plotting
-DF4 <- data.frame(
-  Growth = DF3[, 'Growth_per_m'],
-  Tree = DF3[ , 'Tree'],
-  Site = DF3[ , 'Site'])  
-
-# changing site label to depth label
-DF4$Site_numeric <- DF4$Site
-levels(DF4$Site_numeric) <- list("9" = "03A", "3" = "03F", "39" = "10A")
-DF4; class(DF4$Site_numeric)
-DF4$Depth <- as.character(DF4$Site_numeric)
-DF4$Depth <- as.integer(DF4$Depth)
-## sorting by depth
-DF4 <- DF4[with(DF4, order(Depth)), ]
-gr2<- DF4
+  # DF1 <- tall.gr
+  # DF2 <- tree.info
+  # 
+  # DF3 <- merge(
+  #   x = DF1 , # [c('TIMESTAMP', 'Mean','Site','Tree')]
+  #   y = DF2, # [c('Site', 'Tree', 'DBH_cm')]
+  #   by.x = c('Tree', 'Site'),
+  #   by.y = c('Port', 'Site'))
+  # 
+  # head(DF3)
+  # 
+  # # divide (tree growth) by (radius @ breast height)
+  # # convert radiusto mm
+  # DF3$DBH_mm <- DF3$DBH_cm * 10 
+  # DF3$rad_mm <- DF3$DBH_mm / 2 
+  # # divide Growth by radius
+  # DF3$Growth_per_mm <- DF3$Growth / DF3$rad_mm
+  # 
+  # # divide (tree growth) by (radius in m)
+  # DF3$rad_m <- DF3$rad_mm / 1000
+  # DF3$Growth_per_m <- DF3$Growth / DF3$rad_m
+  # 
+  # # selecting only columns of interest for plotting
+  # DF4 <- data.frame(
+  #   Growth = DF3[, 'Growth_per_m'],
+  #   Tree = DF3[ , 'Tree'],
+  #   Site = DF3[ , 'Site'])  
+  # 
+  # # changing site label to depth label
+  # DF4$Site_numeric <- DF4$Site
+  # levels(DF4$Site_numeric) <- list("9" = "03A", "3" = "03F", "39" = "10A")
+  # DF4; class(DF4$Site_numeric)
+  # DF4$Depth <- as.character(DF4$Site_numeric)
+  # DF4$Depth <- as.integer(DF4$Depth)
+  # ## sorting by depth
+  # DF4 <- DF4[with(DF4, order(Depth)), ]
+  # gr2<- DF4
 ################################################################################
 
 # removing globoideas
 ################################################################
-# dropping out dendro 4 at 3F and 10A
-tall.gr <- DF4
-temp <- tall.gr
-temp <- temp[ -c(which(temp$Site =='10A' & temp$Tree == 4)) , ]
-temp <- temp[ -c(which(temp$Site =='03F' & temp$Tree == 4)) , ]
-gr3 <- temp
+  # dropping out dendro 4 at 3F and 10A
+  # tall.gr <- DF4
+  # temp <- tall.gr
+  # temp <- temp[ -c(which(temp$Site =='10A' & temp$Tree == 4)) , ]
+  # temp <- temp[ -c(which(temp$Site =='03F' & temp$Tree == 4)) , ]
+  # gr3 <- temp
 ################################################################
 
 
