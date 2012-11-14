@@ -38,11 +38,8 @@ den.qld <- MergeSynth(den.qld,10*60)
 
 # do some plots. 
   # relevant scripts:
-  # ggplot_Sap.All.R
-  # plot_relative_stem_radius_barchart.R
-
-
-# maybe point to the sci_plot script??
+  # ggplot_dendro_trace - duplicated functionality of:ggplot_Sap.All.R
+  # plot_relative_stem_radius_barchart_qld.R - dupe func of plot_relative_stem_radius_barchart.R
 
 # building metadata dataframes as per loading_00
 tree.names <- TreeInfo(den.qld)

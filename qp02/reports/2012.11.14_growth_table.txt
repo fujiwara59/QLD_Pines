@@ -1,0 +1,14 @@
+"Tree" "Growth"
+"1" NA NA
+"Dendro_Avg.1.Brib" NA 1.57246
+"Dendro_Avg.2.Brib" NA 1.4649784
+"Dendro_Avg.3.Brib" NA 0.7354056
+"Dendro_Avg.4.Brib" NA 1.8901576
+"Dendro_Avg.5.Brib" NA 1.334528
+"Dendro_Avg.6.Brib" NA 0.002425876
+"Dendro_Avg.1.Beer" NA 3.190888
+"Dendro_Avg.2.Beer" NA 2.390836
+"Dendro_Avg.3.Beer" NA 0.871283999999999
+"Dendro_Avg.4.Beer" NA 4.15514
+"Dendro_Avg.5.Beer" NA 0.531475999999999
+"Dendro_Avg.6.Beer" NA 2.453388

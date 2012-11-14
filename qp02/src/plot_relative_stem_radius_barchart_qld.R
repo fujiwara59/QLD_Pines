@@ -19,12 +19,14 @@ DFx <- den.qld                                              #
 # choose method 1 or method 2, and time period to examine   #
 spec.method <- 1                                            #
 #spec.method <- 2                                            #
-spec.s <- as.POSIXct('2012-05-01')                          #
+#spec.s <- as.POSIXct('2012-06-11')
+spec.e <- as.POSIXct('2012-10-09') #
 #############################################################
 
 
 # subset the user specified time period above
 DFx <- DFx[DFx$TIMESTAMP > spec.s, ]
+DFx <- DFx[DFx$TIMESTAMP < spec.e, ]
 
 # method 1: using a loop
 #######################################################################################
@@ -51,7 +53,14 @@ for (i in trees) {
   outputDF[i, 2] <- y
 }
 outputDF
+
 }
+
+digits.backup <- getOption("digits")
+options(digits=2)
+fn <- paste ('./reports/' ,Sys.Date(), '_growth_table.csv', sep = "")
+write.csv(x=outputDF, file=fn)
+options(digits=digits.backup)
 
 detach(package:zoo)
 
