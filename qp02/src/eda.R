@@ -9,27 +9,10 @@ for (dataset in project.info$data)
   print(head(get(dataset)))
 }
 
-# loading data from inside a given date folder
-hh <- getwd()
-target.dir <- './data/2012-11-05/'
-output.list <- CSVsToDF_Batch(target.dir)
-setwd(hh)
 
-# merging the multiple dataframe objects
-# (combine multiple sites into one dataframe)
-if (length(output.list) == 2) {
-  den.qld <- merge(output.list[[1]],
-                 output.list[[2]],
-                 by='TIMESTAMP', 
-                 all = TRUE
-                 )
-  } else stop()
-
-# changing TIMESTAMP to POSIX
-# changing mV to microns                        
+# changing mV to mm                        
 source('~/Dropbox/phd/r_scripts/functions00.R')
 den.qld <- millivolts_to_mm(den.qld)
-den.qld[,1] <- as.POSIXct(den.qld[,1])
 
 # Filling missing times
 source('~/Dropbox/phd/r_scripts/function_synth_00.R')

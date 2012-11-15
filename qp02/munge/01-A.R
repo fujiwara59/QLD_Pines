@@ -91,3 +91,29 @@ CSVsToDF_Batch <- function( target.dir ) {
 
 # target.dir <- '/Users/fuji/Documents/2012-10-28\ R\ scripting\ with\ JM/Kangaloon_Data_20121023/Kanga_Data_per_site'
 # output.list <- CSVsToDF_Batch(target.dir)
+
+
+
+# loading data from inside a given date folder
+hh <- getwd()
+target.dir <- './data/2012-11-05/'
+output.list <- CSVsToDF_Batch(target.dir)
+setwd(hh)
+
+cache('output.list')
+
+
+# merging the multiple dataframe objects
+# (combine multiple sites into one dataframe)
+if (length(output.list) == 2) {
+  den.qld <- merge(output.list[[1]],
+                   output.list[[2]],
+                   by='TIMESTAMP', 
+                   all = TRUE
+  )
+} else stop()
+
+# changing TIMESTAMP to POSIX
+den.qld[,1] <- as.POSIXct(den.qld[,1])
+
+# converting mV to mm
