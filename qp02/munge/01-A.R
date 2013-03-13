@@ -100,18 +100,22 @@ target.dir <- './data/2012-11-05/'
 output.list <- CSVsToDF_Batch(target.dir)
 setwd(hh)
 
-cache('output.list')
 
+# changing TIMESTAMP to POSIX
+for(i in 1:length(output.list)){
+  if(class(output.list[[i]][ ,'TIMESTAMP']) == c("POSIXct", "POSIXt")) print ('Already POSIX, skipping conversion')
+  if(class(output.list[[i]][ ,'TIMESTAMP']) == "character") {
+    print('Timestamp is still only character at this point, converting to POSIX now')
+    output.list[[i]][ , 'TIMESTAMP'] <- as.POSIXct(output.list[[i]][ , 'TIMESTAMP'], format = "%Y-%m-%d %H:%M:%S")
+  }
+}
+
+cache('output.list')
 
 # merging the multiple dataframe objects
 # (combine multiple sites into one dataframe)
-# changing TIMESTAMP to POSIX
-
-for(i in length(output.list))
-  output.list[[i]][ , 'TIMESTAMP'] <- as.POSIXct(output.list[[i]][ , 'TIMESTAMP'], format = "%Y-%m-%d %H:%M:%S")
-
+# TODO, add check to see that class of timestamp is the same for both frames to merge. 
 if (length(output.list) == 2) {
-  
   den.qld <- merge(output.list[[1]],
                    output.list[[2]],
                    by='TIMESTAMP', 
