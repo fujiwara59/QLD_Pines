@@ -35,6 +35,12 @@ ep <- data.matrix(as.data.frame(ep,
 ep.lag1 <- data.matrix(as.data.frame(ep.lag1,
                       stringsAsFactors=FALSE))
 diff1 <- ep - ep.lag1
+diff1 <- na.trim(diff1)
+diff1 <- t(diff1)
+diff1 <- diff1[-(which(row.names(diff1) =='Dendro_Avg.6.Brib')), ]
+diff1 <- diff1[-(which(row.names(diff1) =='Dendro_Avg.3.Beer')), ]
+colnames(diff1) <- format( as.Date(colnames(diff1)), "%b")
+write.csv(diff1, file = paste('reports/', Sys.Date(), 'monthly growth.csv'), append = F)
 
 
 # do some plots. 
