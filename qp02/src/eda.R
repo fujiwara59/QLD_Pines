@@ -23,8 +23,10 @@ mtext('If there is a break in this plot, it means that there is a gap in the dat
 source('~/Dropbox/phd/r_scripts/function_synth_00.R')
 den.qld <- MergeSynth(den.qld,10*60)
 
+# Creating an XTS obj
 den.qld.xts <- xts(den.qld, order.by = den.qld$'TIMESTAMP')
 
+# Calculating the monthly growth, using the XTS object
 ep <- endpoints(den.qld.xts, on = 'months')
 ep <- den.qld.xts[ep, c(5:10,14:19)]
 ep.lag1 <- lag(ep, 1)
