@@ -16,6 +16,10 @@ source('~/Dropbox/phd/r_scripts/functions00.R')
 den.qld <- millivolts_to_mm(den.qld)
 
 # Filling missing times
+# TODO: fix this (iss002)
+plot(x = row.names(den.qld),
+     y = den.qld$TIMESTAMP)
+mtext('If there is a break in this plot, it means that there is a gap in the data')
 source('~/Dropbox/phd/r_scripts/function_synth_00.R')
 den.qld <- MergeSynth(den.qld,10*60)
 
