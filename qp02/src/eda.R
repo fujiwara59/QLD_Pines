@@ -1,4 +1,5 @@
 library('ProjectTemplate')
+setwd('qp02/')
 load.project()
 
 Sys.setenv(TZ='Etc/GMT-10')

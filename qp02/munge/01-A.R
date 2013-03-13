@@ -105,7 +105,13 @@ cache('output.list')
 
 # merging the multiple dataframe objects
 # (combine multiple sites into one dataframe)
+# changing TIMESTAMP to POSIX
+
+for(i in length(output.list))
+  output.list[[i]][ , 'TIMESTAMP'] <- as.POSIXct(output.list[[i]][ , 'TIMESTAMP'], format = "%Y-%m-%d %H:%M:%S")
+
 if (length(output.list) == 2) {
+  
   den.qld <- merge(output.list[[1]],
                    output.list[[2]],
                    by='TIMESTAMP', 
@@ -113,7 +119,5 @@ if (length(output.list) == 2) {
   )
 } else stop()
 
-# changing TIMESTAMP to POSIX
-den.qld[,1] <- as.POSIXct(den.qld[,1])
 
 # converting mV to mm
