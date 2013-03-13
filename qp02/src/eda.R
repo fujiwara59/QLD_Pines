@@ -23,6 +23,17 @@ mtext('If there is a break in this plot, it means that there is a gap in the dat
 source('~/Dropbox/phd/r_scripts/function_synth_00.R')
 den.qld <- MergeSynth(den.qld,10*60)
 
+den.qld.xts <- xts(den.qld, order.by = den.qld$'TIMESTAMP')
+
+ep <- endpoints(den.qld.xts, on = 'months')
+ep <- den.qld.xts[ep, c(5:10,14:19)]
+ep.lag1 <- lag(ep, 1)
+ep <- data.matrix(as.data.frame(ep, 
+                 stringsAsFactors=FALSE))
+ep.lag1 <- data.matrix(as.data.frame(ep.lag1,
+                      stringsAsFactors=FALSE))
+diff1 <- ep - ep.lag1
+
 
 # do some plots. 
   # relevant scripts:
