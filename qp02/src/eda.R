@@ -1,19 +1,22 @@
 library('ProjectTemplate')
 setwd('qp02/')
+wd.backup <- getwd()
+target.dir <- './data/2013-08-03/'
+
 load.project()
 
 Sys.setenv(TZ='Etc/GMT-10')
 
-for (dataset in project.info$data)
-{
-  message(paste('Showing top 5 rows of', dataset))
-  print(head(get(dataset)))
-}
-
-
 # changing mV to mm                        
 source('~/Dropbox/phd/r_scripts/functions00.R')
 den.qld <- millivolts_to_mm(den.qld)
+str(output.list)
+names(output.list)
+target.df <- 1
+target.data <- output.list[[target.df]]
+attr(target.data, 'label') <- substr(names(output.list)[[target.df]], 48,55)
+den.qld <- millivolts_to_mm(target.data)
+
 
 # Filling missing times
 # TODO: fix this (iss002)
@@ -24,7 +27,18 @@ source('~/Dropbox/phd/r_scripts/function_synth_00.R')
 den.qld <- MergeSynth(den.qld,10*60)
 
 # Creating an XTS obj
-den.qld.xts <- xts(den.qld, order.by = den.qld$'TIMESTAMP')
+# Remove non-numeric columns
+target.cols <- which(sapply(den.qld, class) == 'numeric')
+target.cols <- as.integer(target.cols)
+# create xts obj
+den.qld.xts <- xts(den.qld[,c(target.cols)], order.by = den.qld$'TIMESTAMP')
+# Remove batt volt column
+den.qld.xts <- den.qld.xts[ , -c( grep(pattern='Batt', x=colnames(den.qld.xts)) )]
+
+# Plot most recent month, week and 3 days, to graphs/
+source('src/plot.zoo_dendro.trace.R')
+if(F) 
+  plot.zoo(den.qld.xts, screens = 1)
 
 # Calculating the monthly growth, using the XTS object
 ep <- endpoints(den.qld.xts, on = 'months')

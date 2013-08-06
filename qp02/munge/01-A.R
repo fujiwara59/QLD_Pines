@@ -96,7 +96,7 @@ CSVsToDF_Batch <- function( target.dir ) {
 
 # loading data from inside a given date folder
 hh <- getwd()
-target.dir <- './data/2012-11-05/'
+
 output.list <- CSVsToDF_Batch(target.dir)
 setwd(hh)
 
